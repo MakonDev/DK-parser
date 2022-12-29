@@ -1,0 +1,6 @@
+node_modules
+example.html
+.env
+Pipfile
+Pipfile.lock
+scrape.py
