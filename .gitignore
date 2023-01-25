@@ -4,3 +4,4 @@ example.html
 Pipfile
 Pipfile.lock
 scrape.py
+*.csv

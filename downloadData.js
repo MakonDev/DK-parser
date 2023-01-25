@@ -19,29 +19,30 @@ const fs = require('fs');
   });
 
   // Current game to search for
-  const GAME = "SAC"
+  const GAME = "MEM"
 
   const filteredGames = resp.filter((player) => (player.team1 === GAME || player.team2 === GAME))
-  console.log(filteredGames.length)
+
+  const edgeThreshold = 10
 
   let hits = []
   filteredGames.forEach((item) => {
     let entry = {}
-    const pointsEdge = item.points.line !== -1 ? (((item.points.projection-item.points.line)/item.points.line)*100).toFixed(2) : 0
-    const assistsEdge = item.assists.line !== -1 ? (((item.assists.projection-item.assists.line)/item.assists.line)*100).toFixed(2) : 0
-    const threesEdge = item.threes.line !== -1 ? (((item.threes.projection-item.threes.line)/item.threes.line)*100).toFixed(2) : 0
-    const reboundsEdge = item.rebounds.line !== -1 ? (((item.rebounds.projection-item.rebounds.line)/item.rebounds.line)*100).toFixed(2) : 0
-    const turnoversEdge = item.turnovers.line !== -1 ? (((item.turnovers.projection-item.turnovers.line)/item.turnovers.line)*100).toFixed(2) : 0
-    const blocksEdge = item.blocks.line !== -1 ? (((item.blocks.projection-item.blocks.line)/item.blocks.line)*100).toFixed(2) : 0
-    const stealsEdge = item.steals.line !== -1 ? (((item.steals.projection-item.steals.line)/item.steals.line)*100).toFixed(2) : 0
-    const bsEdge = item.blocksNsteals.line !== -1 ? (((item.blocksNsteals.projection-item.blocksNsteals.line)/item.blocksNsteals.line)*100).toFixed(2) : 0
-    const praEdge = item.PRA.line !== -1 ? (((item.PRA.projection-item.PRA.line)/item.PRA.line)*100).toFixed(2) : 0
-    const prEdge = item.PR.line !== -1 ? (((item.PR.projection-item.PR.line)/item.PR.line)*100).toFixed(2) : 0
-    const paEdge = item.PA.line !== -1 ? (((item.PA.projection-item.PA.line)/item.PA.line)*100).toFixed(2) : 0
-    const arEdge = item.AR.line !== -1 ? (((item.AR.projection-item.AR.line)/item.AR.line)*100).toFixed(2) : 0
+    const pointsEdge = item.points.line !== -1 ? item.points.poissonEdge : 0
+    const assistsEdge = item.assists.line !== -1 ? item.assists.poissonEdge : 0
+    const threesEdge = item.threes.line !== -1 ? item.threes.poissonEdge : 0
+    const reboundsEdge = item.rebounds.line !== -1 ? item.rebounds.poissonEdge : 0
+    const turnoversEdge = item.turnovers.line !== -1 ? item.turnovers.poissonEdge : 0
+    const blocksEdge = item.blocks.line !== -1 ? item.blocks.poissonEdge : 0
+    const stealsEdge = item.steals.line !== -1 ? item.steals.poissonEdge : 0
+    const bsEdge = item.blocksNsteals.line !== -1 ? item.blocksNsteals.poissonEdge : 0
+    const praEdge = item.PRA.line !== -1 ? item.PRA.poissonEdge : 0
+    const prEdge = item.PR.line !== -1 ? item.PR.poissonEdge : 0
+    const paEdge = item.PA.line !== -1 ? item.PA.poissonEdge : 0
+    const arEdge = item.AR.line !== -1 ? item.AR.poissonEdge : 0
 
-    if (Math.abs(pointsEdge) >= 15) {
-      const direction = pointsEdge > 0 ? "Over" : "Under"
+    if (pointsEdge >= edgeThreshold) {
+      const direction = item.points.projection > item.points.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Points"
       entry["ETR"] = item.points.projection
@@ -53,8 +54,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(assistsEdge) >= 15) {
-      const direction = assistsEdge > 0 ? "Over" : "Under"
+    if (assistsEdge >= edgeThreshold) {
+      const direction = item.assists.projection > item.assists.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Assists"
       entry["ETR"] = item.assists.projection
@@ -66,8 +67,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(threesEdge) >= 15) {
-      const direction = threesEdge > 0 ? "Over" : "Under"
+    if (threesEdge >= edgeThreshold) {
+      const direction = item.threes.projection > item.threes.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Threes"
       entry["ETR"] = item.threes.projection
@@ -79,8 +80,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(reboundsEdge) >= 15) {
-      const direction = reboundsEdge > 0 ? "Over" : "Under"
+    if (reboundsEdge >= edgeThreshold) {
+      const direction = item.rebounds.projection > item.rebounds.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Rebounds"
       entry["ETR"] = item.rebounds.projection
@@ -92,8 +93,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(turnoversEdge) >= 15) {
-      const direction = turnoversEdge > 0 ? "Over" : "Under"
+    if (turnoversEdge >= edgeThreshold) {
+      const direction = item.turnovers.projection > item.turnovers.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Turnovers"
       entry["ETR"] = item.turnovers.projection
@@ -105,8 +106,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(blocksEdge) >= 15) {
-      const direction = blocksEdge > 0 ? "Over" : "Under"
+    if (blocksEdge >= edgeThreshold) {
+      const direction = item.blocks.projection > item.blocks.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Blocks"
       entry["ETR"] = item.blocks.projection
@@ -118,8 +119,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(stealsEdge) >= 15) {
-      const direction = stealsEdge > 0 ? "Over" : "Under"
+    if (stealsEdge >= edgeThreshold) {
+      const direction = item.steals.projection > item.steals.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "Steals"
       entry["ETR"] = item.steals.projection
@@ -131,8 +132,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(bsEdge) >= 15) {
-      const direction = bsEdge > 0 ? "Over" : "Under"
+    if (bsEdge >= edgeThreshold) {
+      const direction = item.blocksNsteals.projection > item.blocksNsteals.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "BS"
       entry["ETR"] = item.blocksNsteals.projection
@@ -144,8 +145,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(praEdge) >= 15) {
-      const direction = praEdge > 0 ? "Over" : "Under"
+    if (praEdge >= edgeThreshold) {
+      const direction = item.PRA.projection > item.PRA.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "PRA"
       entry["ETR"] = item.PRA.projection
@@ -157,8 +158,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(paEdge) >= 15) {
-      const direction = paEdge > 0 ? "Over" : "Under"
+    if (paEdge >= edgeThreshold) {
+      const direction = item.PA.projection > item.PA.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "PA"
       entry["ETR"] = item.PA.projection
@@ -170,8 +171,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(prEdge) >= 15) {
-      const direction = prEdge > 0 ? "Over" : "Under"
+    if (prEdge >= edgeThreshold) {
+      const direction = item.PR.projection > item.PR.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "PR"
       entry["ETR"] = item.PR.projection
@@ -183,8 +184,8 @@ const fs = require('fs');
       hits.push(entry)
       entry = {}
     }
-    if (Math.abs(arEdge) >= 15) {
-      const direction = arEdge > 0 ? "Over" : "Under"
+    if (arEdge >= edgeThreshold) {
+      const direction = item.AR.projection > item.AR.line ? "Over" : "Under"
       entry["Player"] = item.player
       entry["Category"] = "AR"
       entry["ETR"] = item.AR.projection
@@ -198,16 +199,19 @@ const fs = require('fs');
     }
   })
 
-  console.log(hits.length)
-  converter.json2csv(hits, (err, csv) => {
-    if (err) {
-      throw err
-    }
-  
-    // print CSV string
-    console.log(csv)
-  
-    // write CSV to a file
-    fs.writeFileSync(`${GAME}.csv`, csv)
-  })
+  if (hits.length > 0) { 
+    converter.json2csv(hits, (err, csv) => {
+      if (err) {
+        throw err
+      }
+    
+      // print CSV string
+      console.log(csv)
+    
+      // write CSV to a file
+      //fs.writeFileSync(`${GAME}.csv`, csv)
+    })
+  } else {
+    console.log("No edges")
+  }
 })();

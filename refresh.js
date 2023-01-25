@@ -17,4 +17,4 @@ setInterval(async () => {
   } else {
     console.log("Not the right time of day!")
   }
-}, 2700000);
+}, 1800000);
