@@ -46,11 +46,6 @@ const searchForETRProjections = async () => {
     chunkedData.push(dataObject)
   }
   console.log(chunkedData.length)
-  console.log(chunkedData[0])
-  console.log(chunkedData[1])
-  console.log(chunkedData[2])
-  console.log(chunkedData[3])
-  console.log(chunkedData[4])
   //await page.screenshot({path: 'screenshot.png', fullPage: true});
   browser.close();
   return chunkedData
