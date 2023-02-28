@@ -19,7 +19,7 @@ const fs = require('fs');
   });
 
   // Current game to search for
-  const GAME = "MEM"
+  const GAME = "ORL"
 
   const filteredGames = resp.filter((player) => (player.team1 === GAME || player.team2 === GAME))
 

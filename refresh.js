@@ -5,6 +5,8 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+console.log("Refresh tool running!")
+
 setInterval(async () => {
   const date = new Date();
   console.log(`Current hour: ${date.getHours()}`)
